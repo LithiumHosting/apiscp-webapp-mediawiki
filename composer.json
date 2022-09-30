@@ -1,12 +1,12 @@
 {
-    "name": "apisnetworks/apiscp-webapp-demo",
-    "description": "A demo web application for ApisCP",
+    "name": "lithiumhosting/apiscp-webapp-mediawiki",
+    "description": "MediaWiki web application for ApisCP",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Matt Saladna",
-            "email": "msaladna@apisnetworks.com"
+            "name": "Troy Siedsma",
+            "email": "tsiedsma@lithiumhosting.com"
         }
     ],
     "minimum-stability": "dev",
