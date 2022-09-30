@@ -13,14 +13,13 @@ Edit config/custom/boot.php, create if not exists:
 
 ```php
 <?php
-	\a23r::registerModule('limediawiki', \lithiumhosting\mediawiki\Mediawiki_Module::class);
-	\Module\Support\Webapps::registerApplication('mediawiki', \apisnetworks\mediawiki\Handler::class);
+	\a23r::registerModule('mediawiki', \LithiumHosting\WebApps\MediaWiki\MediaWiki_Module::class);
+	\Module\Support\Webapps::registerApplication('mediawiki', \LithiumHosting\WebApps\MediaWiki\Handler::class);
 ```
 
-Then restart ApisCP.
-
+Then refresh the web apps
 ```bash
-systemctl restart apiscp
+cpcmd webapp:refresh-apps
 ```
 
 Voila!
