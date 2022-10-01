@@ -1,14 +1,14 @@
 {
-    "name": "lithiumhosting/apiscp-webapp-mediawiki",
-    "description": "MediaWiki web application for ApisCP",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Troy Siedsma",
-            "email": "tsiedsma@lithiumhosting.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {}
+  "name": "lithiumhosting/apiscp-webapp-mediawiki",
+  "description": "MediaWiki web application for ApisCP",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+	{
+	  "name": "Troy Siedsma",
+	  "email": "tsiedsma@lithiumhosting.com"
+	}
+  ],
+  "minimum-stability": "dev",
+  "require": {}
 }
