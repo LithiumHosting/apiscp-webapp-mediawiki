@@ -1,0 +1,74 @@
+<?php
+require_once dirname(__DIR__, 1) . '/TestFramework.php';
+
+class MediaWikiTest extends TestFramework
+{
+	const EXCEPTION_LEVEL = \Error_Reporter::E_ERROR;
+	const INSTALL_VERSION = '1.38.4';
+
+	public function testVersionFetch()
+	{
+		$afi = \apnscpFunctionInterceptor::init();
+		$versions = $afi->mediawiki_get_versions();
+		$this->assertNotEmpty($versions, 'Version check succeeded');
+		$this->assertContains('1.38.4', $versions, '1.38.4 in version index');
+		$this->assertGreaterThan(array_search('1.38.0', $versions), array_search('1.38.4', $versions),
+			'Versions are ordered');
+	}
+
+	public function testInstall() {
+		$account = \Opcenter\Account\Ephemeral::create(['cgroup.enabled' => 0]);
+		$afi = $account->getApnscpFunctionInterceptor();
+		$domain = $account->getContext()->domain;
+		$version = \Opcenter\Versioning::asMajor(self::INSTALL_VERSION);
+		$maximal = \Opcenter\Versioning::maxVersion($afi->mediawiki_get_versions(), $version);
+
+		$this->assertTrue(
+			$afi->mediawiki_install(
+				$domain,
+				'',
+				[
+					'version' => self::INSTALL_VERSION,
+					'notify'  => false,
+					'ssl'     => false,
+					'email'   => null,
+					'verlock' => 'major'
+				]
+			)
+		);
+
+		$this->assertEquals($maximal, $afi->mediawiki_get_version($domain), 'Correct MediaWiki version is installed');
+	}
+
+	public function testInstallUpgrade() {
+		$account = \Opcenter\Account\Ephemeral::create(['cgroup.enabled' => 0]);
+		$afi = $account->getApnscpFunctionInterceptor();
+		$domain = $account->getContext()->domain;
+		$versions = $afi->mediawiki_get_versions();
+		$version = $versions[\count($versions)-2];
+		$maximal = \Opcenter\Versioning::maxVersion($versions);
+		$this->assertNotEquals($version, $maximal, 'Version update can succeed');
+
+		$this->assertTrue(
+			$afi->mediawiki_install(
+				$domain,
+				'',
+				[
+					'version' => $version,
+					'notify'  => false,
+					'ssl'     => false,
+					'email'   => null,
+					'verlock' => 'minor'
+				]
+			)
+		);
+		$this->assertEquals($version, $afi->mediawiki_get_version($domain));
+
+		$this->assertTrue(
+			$afi->mediawiki_update_all($domain, ''),
+			'MediaWiki update succeeded'
+		);
+
+		$this->assertEquals($maximal, $afi->mediawiki_get_version($domain), 'Correct MediaWiki version is installed');
+	}
+}
