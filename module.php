@@ -3,6 +3,7 @@
 use LithiumHosting\WebApps\MediaWiki\Handler;
 use Module\Support\Webapps;
 use Module\Support\Webapps\DatabaseGenerator;
+use Module\Support\Webapps\PhpWrapper;
 use Module\Support\Webapps\VersionFetcher\Github;
 use Opcenter\Auth\Password;
 use Opcenter\Versioning;
@@ -98,7 +99,7 @@ class MediaWiki_Module extends Webapps
 			];
 
 			// https://www.mediawiki.org/wiki/Manual:Install.php
-			$installCommand = 'cd %(path)s && php maintenance/install.php '.
+			$installCommand = 'install.php '.
 				'--dbserver %(dbserver)s '.
 				'--dbname %(dbname)s '.
 				'--dbuser %(dbuser)s '.
@@ -110,7 +111,7 @@ class MediaWiki_Module extends Webapps
 				'--scriptpath "" '.
 				'"%(sitename)s" %(adminuser)s';
 
-			$ret = $this->pman_run($installCommand, $installArgs);
+			$ret = PhpWrapper::instantiateContexted($this->getAuthContextFromDocroot($approot))->exec("$approot/maintenance", $installCommand, $installArgs);
 
 			if (! $ret['success']) {
 				return error("failed to install %(app)s: %(err)s", [
