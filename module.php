@@ -255,10 +255,7 @@ class MediaWiki_Module extends Webapps
 			$this->downloadPackage($approot, $version);
 
 			// https://www.mediawiki.org/wiki/Manual:Update.php
-			$upgradeCommand = "cd %(path)s && php maintenance/update.php --quick";
-			$ret = $this->pman_run($upgradeCommand, [
-				'path' => $approot
-			]);
+			$ret = PhpWrapper::instantiateContexted($this->getAuthContextFromDocroot($approot))->exec("$approot/maintenance", 'update.php --quick');
 
 			if (! $ret['success']) {
 				return error("Failed to upgrade %s: %s", static::APP_NAME, $ret['stdout']);

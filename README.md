@@ -1,4 +1,4 @@
-# ApisCP MediaWiki application
+# ApisCP Mediawiki application
 
 This is a web application for [ApisCP](https://apiscp.com).
 
